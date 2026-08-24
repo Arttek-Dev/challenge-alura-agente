@@ -3,8 +3,13 @@ import pypdf
 import streamlit as st
 import google.generativeai as genai
 
-# Obtém a chave de Secrets (Streamlit Cloud) ou variável de ambiente/fallback local
-API_KEY = st.secrets.get("GOOGLE_API_KEY", os.getenv("GOOGLE_API_KEY", "AQ.Ab8RN6ITF3o5FNyHcSsw3J0655Gr6kXyCLfGEcdqZ1m2Rv9oYg"))
+# Lê a chave com segurança das Secrets do Streamlit Cloud ou do ambiente
+API_KEY = st.secrets.get("GOOGLE_API_KEY", os.getenv("GOOGLE_API_KEY"))
+
+if not API_KEY:
+    st.error("Chave de API não configurada. Configure a variável GOOGLE_API_KEY nas Secrets do Streamlit.")
+    st.stop()
+
 genai.configure(api_key=API_KEY)
 
 st.set_page_config(page_title="BimBam Buy - Assistente IA", page_icon="🛍️", layout="centered")
